@@ -6,8 +6,23 @@ import sqlite3
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
 
-DB_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "runtime")
-DB_PATH = os.path.join(DB_DIR, "promptshield.db")
+import shutil
+
+LOCAL_DB_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "runtime")
+LOCAL_DB_PATH = os.path.join(LOCAL_DB_DIR, "promptshield.db")
+
+# On Vercel or serverless environments, root is read-only; copy and use /tmp
+if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    DB_DIR = "/tmp"
+    DB_PATH = "/tmp/promptshield.db"
+    if not os.path.exists(DB_PATH) and os.path.exists(LOCAL_DB_PATH):
+        try:
+            shutil.copy2(LOCAL_DB_PATH, DB_PATH)
+        except Exception:
+            pass
+else:
+    DB_DIR = LOCAL_DB_DIR
+    DB_PATH = LOCAL_DB_PATH
 
 EMPLOYEE_PROFILES = [
     {"name": "Alex Vance", "employee_id": "EMP-8842", "email": "alex.vance@internal-corp.net", "department": "Finance & Commercial Operations", "client_ip": "192.168.1.104", "workstation": "WS-CORP-FIN-03"},
@@ -557,7 +572,9 @@ def get_authority_stats() -> Dict[str, Any]:
 
     return {
         "total_prompts": total_prompts if total_prompts > 0 else 50,
-        "malicious_attempts": malicious_attempts if malicious_attempts > 0 else 5
+        "malicious_attempts": malicious_attempts if malicious_attempts > 0 else 5,
+        "transferred_incidents": malicious_attempts if malicious_attempts > 0 else 5,
+        "departments_monitored": 6
     }
 
 def seed_authority_data_if_needed():

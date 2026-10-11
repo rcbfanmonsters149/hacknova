@@ -23,8 +23,9 @@ app.add_middleware(
 # Initialize local SQLite database schema
 init_db()
 
-# Mount API endpoints
+# Mount API endpoints (both with and without /api prefix for Vercel serverless and local dev)
 app.include_router(router)
+app.include_router(router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn
