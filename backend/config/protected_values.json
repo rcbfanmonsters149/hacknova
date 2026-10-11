@@ -1,0 +1,39 @@
+{
+  "protected_tokens": [
+    {
+      "id": "TOKEN-001",
+      "name": "Demo Internal System Token",
+      "value": "DEMO_INTERNAL_TOKEN_4821",
+      "description": "Restricted administrative token for internal gateway access",
+      "category": "authentication"
+    },
+    {
+      "id": "TOKEN-002",
+      "name": "PromptShield Master Secret Key",
+      "value": "PROMPT_SHIELD_SEC_9942",
+      "description": "Simulated master secret key for security gateway signing",
+      "category": "cryptographic_key"
+    },
+    {
+      "id": "TOKEN-003",
+      "name": "Corporate Finance Ledger Credential",
+      "value": "CORP_FINANCE_KEY_7103",
+      "description": "Fictional corporate finance database read key",
+      "category": "database_credential"
+    }
+  ],
+  "unauthorized_domains": [
+    "attacker.example",
+    "evil-exfil.net",
+    "leak-data.com",
+    "webhook.site",
+    "requestbin.com",
+    "pastebin.com",
+    "collect.internal-leak.com"
+  ],
+  "authorized_domains": [
+    "api.company.internal",
+    "reports.company.internal",
+    "safe-analytics.internal"
+  ]
+}
